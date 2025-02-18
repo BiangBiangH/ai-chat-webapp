@@ -37,6 +37,16 @@ class User(db.Model, UserMixin):
         return check_password_hash(self.password_hash, password)
 
 
+# 添加在现有路由之前或之后均可（建议放在前面）
+@app.route('/')
+def index():
+    # 如果用户已登录，跳转到聊天页；否则跳转到登录页
+    if current_user.is_authenticated:
+        return redirect(url_for('chat'))
+    else:
+        return redirect(url_for('login'))
+
+
 # 用户加载器
 @login_manager.user_loader
 def load_user(user_id):
