@@ -127,6 +127,26 @@ def init_db():
         db.create_all()
     print('✅ 数据库初始化完成')
 
+
+@app.cli.command('create-user')
+def create_user():
+    """创建新用户命令"""
+    username = input("请输入用户名: ")
+    password = input("请输入密码: ")
+
+    with app.app_context():
+        if User.query.filter_by(username=username).first():
+            print("⚠️ 用户名已存在")
+            return
+
+        user = User(username=username)
+        user.set_password(password)
+        db.session.add(user)
+        db.session.commit()
+        print(f"✅ 用户 {username} 创建成功")
+
+
+
 if __name__ == '__main__':
     # 开发环境直接运行
     with app.app_context():
