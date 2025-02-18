@@ -130,21 +130,38 @@ def init_db():
 
 @app.cli.command('create-user')
 def create_user():
-    def create_default_user():
-        """创建默认测试用户（用户名: test，密码: 123456）"""
-        username = "test"
-        password = "123456"
+    """创建新用户命令"""
+    username = input("请输入用户名: ")
+    password = input("请输入密码: ")
 
-        with app.app_context():
-            if User.query.filter_by(username=username).first():
-                print("⚠️ 默认用户已存在")
-                return
+    with app.app_context():
+        if User.query.filter_by(username=username).first():
+            print("⚠️ 用户名已存在")
+            return
 
-            user = User(username=username)
-            user.set_password(password)
-            db.session.add(user)
-            db.session.commit()
-            print(f"✅ 默认用户创建成功 - 用户名: {username}，密码: {password}")
+        user = User(username=username)
+        user.set_password(password)
+        db.session.add(user)
+        db.session.commit()
+        print(f"✅ 用户 {username} 创建成功")
+
+@app.cli.command('create-default-user')
+def create_default_user():
+    """创建默认测试用户（用户名: test，密码: 123456）"""
+    username = "test"
+    password = "123456"
+
+    with app.app_context():
+        if User.query.filter_by(username=username).first():
+            print("⚠️ 默认用户已存在")
+            return
+
+        user = User(username=username)
+        user.set_password(password)
+        db.session.add(user)
+        db.session.commit()
+        print(f"✅ 默认用户创建成功 - 用户名: {username}，密码: {password}")
+
 
 
 
