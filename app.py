@@ -108,15 +108,18 @@ def get_ai_response(prompt):
         current_app.logger.error("API响应格式异常")
         return "收到意外的响应格式"
 
+# 在文件底部添加以下代码（不要删除已有路由）
 
-# 初始化数据库
 @app.cli.command('init-db')
 def init_db():
+    """初始化数据库命令"""
     with app.app_context():
         db.create_all()
-    print("数据库已初始化")
+    print('✅ 数据库初始化完成')
 
-
-# 启动应用
 if __name__ == '__main__':
+    # 开发环境直接运行
+    with app.app_context():
+        db.create_all()
     app.run(debug=True)
+
